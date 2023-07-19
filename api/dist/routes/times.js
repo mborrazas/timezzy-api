@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.router = void 0;
+const express_1 = require("express");
+const session_1 = require("../middleware/session");
+const times_1 = require("../controllers/times");
+const router = (0, express_1.Router)();
+exports.router = router;
+router.post("/create", session_1.checkJwt, times_1.createTimeCtrl);
+router.get("/list", session_1.checkJwt, times_1.listTimesCtrl);

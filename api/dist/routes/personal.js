@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.router = void 0;
+const express_1 = require("express");
+const session_1 = require("../middleware/session");
+const personal_1 = require("../controllers/personal");
+const router = (0, express_1.Router)();
+exports.router = router;
+router.get("/get/:id", session_1.checkJwt, personal_1.getPersonalCtrl);
+router.post("/update/:id", session_1.checkJwt, personal_1.updatePersonalCtrl);
+router.post("/delete/:id", session_1.checkJwt, personal_1.deletePersonalCtrl);
+router.post("/create", session_1.checkJwt, personal_1.createPersonalCtrl);
+router.get("/list", session_1.checkJwt, personal_1.listPersonalCtrl);
+router.get("/list/public", personal_1.listPersonalCtrl);
+router.post("/listByServices", session_1.checkJwt, personal_1.listByServicesCtrl);
