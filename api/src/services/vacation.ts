@@ -22,6 +22,7 @@ const createVacation = async ({ name, openHour, closeHour, personal, fullDay }: 
 }
 
 const deleteVacation = async (id: any, comercio: any) => {
+    console.log(id);
     const deleteVacation = await VacationModel.deleteOne({ comercio, _id: id });
     if (!deleteVacation) return "ERROR_DELETE_VACATION";
     return deleteVacation;

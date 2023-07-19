@@ -17,6 +17,10 @@ const Serviceschema = new Schema<Service>(
         },
         personal: {
             type: [Schema.Types.ObjectId]
+        },
+        price: {
+            type: String,
+            required: true
         }
     },
     {

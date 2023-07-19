@@ -8,7 +8,8 @@ import { getVacationForPersonal } from "../services/vacation";
 
 const listBookingCtrl = async ({ body, user }: any, res: Response) => {
     const { comercio } = user;
-    const listBookingResponse = await listBooking(comercio);
+    const { date } = body;
+    const listBookingResponse = await listBooking(comercio, date);
     res.send(listBookingResponse);
 };
 
@@ -46,8 +47,8 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
 
     const dateSelected = moment(body.day, 'YYYY-MM-DD')
 
-    const personalBookings = await getBookingByPersonalAndDate(body.personal, comercio, dateSelected);
-
+    
+    const personalBookings = await getBookingByPersonalAndDate(body.personal, comercio, dateSelected.format('YYYY-MM-DD'));
 
     const dateUsed = personalBookings.map((booking) => {
         return { openHour: booking.openHour, closeHour: booking.closeHour };
@@ -71,12 +72,14 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
         return;
     }
 
+
     const service = await getService(body.service, comercio);
 
     if (!service) {
         res.send({});
         return;
     }
+
 
     const tiempo = body.hours;
 
@@ -102,7 +105,10 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
     }
 
 
+
     const format = 'hh:mm';
+
+
 
     const dateAvailable = fechas.filter((hour) => {
 
@@ -120,15 +126,18 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
             }
         });
 
+
         if (usedDate) {
             return false;
         }
 
-        let storeOpened = false;
+        let storeOpened = true; 
         storeHours.hours.map((date) => {
-            if (moment(hour, 'h:m').isBetween(moment(date.start, format), moment(date.end, format), null, '[]')
-                && moment(endTime, 'h:m').isBetween(moment(date.start, format), moment(date.end, format), null, '[]')) {
-                storeOpened = true;
+            if (date) {
+                if (moment(hour, 'h:m').isBetween(moment(date.start, format), moment(date.end, format), null, '[]')
+                    && moment(endTime, 'h:m').isBetween(moment(date.start, format), moment(date.end, format), null, '[]')) {
+                    storeOpened = true;
+                }
             }
         });
 
@@ -142,7 +151,6 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
     let responseToSend: { [key: string]: Array<Object> } = {};
 
     responseToSend[body.day] = [];
-
     dateAvailable.map((item) => {
         responseToSend[body.day].push({
             name: item,
@@ -151,6 +159,8 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
             date: body.day
         });
     })
+
+
 
     res.send(responseToSend);
 }

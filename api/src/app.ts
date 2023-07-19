@@ -12,6 +12,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors());
 app.use(express.json());
-app.use(router);
+//app.use(router);
 db().then(() => console.log("DB connection already"));
 app.listen(PORT, () => console.log(`App ready in port: ${PORT}`));

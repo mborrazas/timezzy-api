@@ -1,37 +1,63 @@
 import { Booking } from "../interfaces/booking.interface";
+import { Client } from "../interfaces/client.interface";
 import BookingModel from "../models/booking"
+import ClientModel from "../models/client";
+import PersonalModel from "../models/personal";
+import ServiceModel from "../models/service";
 
 
-const listBooking = async (comercio: string) => {
+const listBooking = async (comercio: string, date: string) => {
     const booking = await BookingModel.find({ comercio });
-    const response: any = {};
 
-    booking.forEach(item => {
+    const response: any = {};
+    response[date] = [];
+    for (const item of booking) {
         if (typeof response[item.date] == 'undefined') {
             response[item.date] = [];
         }
-        response[item.date].push(
-            {
-                id: item.id,
-                name: 'Item for lokomotiv 1',
-                description: 'Descripcion',
-                start: item.openHour,
-                end: item.closeHour,
-                service: item.services,
-                client: item.client,
-                staff: item.personal,
-                date: item.date
-            }
-        );
-    });
-
+        const service: any = await ServiceModel.findOne({ _id: item.services });
+        const client: any = await ClientModel.findOne({ _id: item.client });
+        const staff: any = await PersonalModel.findOne({ _id: item.personal });
+        if (client && service && staff) {
+            response[item.date].push(
+                {
+                    id: item.id,
+                    name: 'Reserva Cliente: ' + client.name,
+                    description: '',
+                    start: item.openHour,
+                    end: item.closeHour,
+                    serviceName: service.name,
+                    service: item.services,
+                    client: item.client,
+                    clientName: client.name,
+                    servicePersonal: item.personal,
+                    personalName: staff.name,
+                    date: item.date
+                }
+            );
+        } else {
+            response[item.date].push(
+                {
+                    id: item.id,
+                    name: 'Reserva',
+                    description: '',
+                    start: item.openHour,
+                    end: item.closeHour,
+                    serviceName: '',
+                    service: item.services,
+                    client: item.client,
+                    clientName: '',
+                    staff: item.personal,
+                    date: item.date
+                }
+            );
+        }
+    }
     return response;
 }
 
 
 const updateBooking = async ({ client, services, openHour, closeHour, personal, status, date }: Booking, id: any, comercio: any) => {
-    const booking = await BookingModel.find({ _id: id, comercio });
-    console.log(booking);
     const updateBooking = await BookingModel.updateOne({ _id: id, comercio }, { $set: { personal, client, services, openHour, closeHour, status } });
     if (!updateBooking) return "ERROR_UPDATE_BOOKING";
     return updateBooking;

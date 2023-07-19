@@ -5,4 +5,5 @@ export interface Service {
     duration: string;
     name: string;
     personal: [Schema.Types.ObjectId];
+    price: string;
 }

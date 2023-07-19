@@ -24,15 +24,15 @@ const updatePersonalService = async (services: any, personal: string) => {
     return updateService;
 }
 
-const updateService = async ({ duration, name, personal }: Service, id: any, comercio: any) => {
-    const updateService = await ServiceModel.updateOne({ _id: id, comercio: comercio }, { $set: { duration, name, personal } });
+const updateService = async ({ duration, name, personal, price }: Service, id: any, comercio: any) => {
+    const updateService = await ServiceModel.updateOne({ _id: id, comercio: comercio }, { $set: { duration, name, personal, price } });
     if (!updateService) return "ERROR_UPDATE_SERVICE";
     return updateService;
 }
 
 
-const createService = async ({ duration, name, personal }: Service, comercio: any) => {
-    const registerNewService = await ServiceModel.create({ duration, name, personal, comercio });
+const createService = async ({ duration, name, personal, price }: Service, comercio: any) => {
+    const registerNewService = await ServiceModel.create({ duration, name, personal, comercio, price });
     if (!registerNewService) return "ERROR_SAVE_SERVICE";
     return registerNewService;
 }

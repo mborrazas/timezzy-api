@@ -5,7 +5,7 @@ import { listBookingCtrl, updateBookingCtrl, deleteBookingCtrl, createBookingCtr
 
 const router = Router(); 
 
-router.get("/list", checkJwt, listBookingCtrl);
+router.post("/list", checkJwt, listBookingCtrl);
 router.post("/create", checkJwt, createBookingCtrl);
 router.get("/get/:id", checkJwt, getBookingCtrl);
 router.post("/delete/:id", checkJwt, deleteBookingCtrl);

@@ -6,8 +6,8 @@ import { generateToken } from "../utils/jwt.handle";
 
 
 const loginUser = async ({ email, password }: Auth) => {
-    const checkIs = await PersonalModel.findOne({ email });
-
+    const checkIs = await PersonalModel.findOne({ email }); 
+    
     if (!checkIs) return "NOT_FOUND_USER";
 
     const passwordHash = checkIs.password;
