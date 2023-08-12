@@ -82,26 +82,31 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
 
 
     const tiempo = body.hours;
-
+    
     const serviceTime = Number(service[0].duration);
 
     const [horas, minutos] = tiempo.split(":");
 
-    //Calculamos cual es el "cuarto de hora" actual basado en los minutos
-    //Es decir 00, 15, 30 o 45
+    // Calculamos cual es el "cuarto de hora" actual basado en los minutos
+    // Es decir 00, 15, 30 o 45
     let cuartoActual = Math.floor(Number(minutos) / serviceTime) * serviceTime;
 
-    //Iniciamos la fecha en la hora 0 de hoy y le asignamos la hora y los minutos del cuarto de hora actual
+    // Iniciamos la fecha en la hora 0 de hoy y le asignamos la hora y los minutos del cuarto de hora actual
+    
     let fecha = moment().startOf("day").hour(Number(horas)).minute(cuartoActual);
+    if(moment().isSame(dateSelected, 'date')){
+        let fecha = moment().startOf("day");
+    }
+
     const currentDay = fecha.date(); //Sacamos el dia actual de esa hora
 
-    const fechas = []; //Array para almacenar las fechas
+    const fechas = []; // Array para almacenar las fechas
 
     fecha = moment(fecha).add(serviceTime, "minutes") //Aumentamos 15 minutos
-
-    while (fecha.date() === currentDay) {   //mientras siga siendo el mismo dia
-        fechas.push(fecha.format("HH:mm"))  //agregamos la fecha
-        fecha = moment(fecha).add(serviceTime, "minutes") //Aumentamos 15 minutos
+ 
+    while (fecha.date() === currentDay) {   // mientras siga siendo el mismo dia
+        fechas.push(fecha.format("HH:mm"))  // agregamos la fecha
+        fecha = moment(fecha).add(serviceTime, "minutes") // Aumentamos 15 minutos
     }
 
 
