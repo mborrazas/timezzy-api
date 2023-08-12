@@ -79,17 +79,20 @@ const getBookingHoursCtrl = ({ body, user }, res) => __awaiter(void 0, void 0, v
     const tiempo = body.hours;
     const serviceTime = Number(service[0].duration);
     const [horas, minutos] = tiempo.split(":");
-    //Calculamos cual es el "cuarto de hora" actual basado en los minutos
-    //Es decir 00, 15, 30 o 45
+    // Calculamos cual es el "cuarto de hora" actual basado en los minutos
+    // Es decir 00, 15, 30 o 45
     let cuartoActual = Math.floor(Number(minutos) / serviceTime) * serviceTime;
-    //Iniciamos la fecha en la hora 0 de hoy y le asignamos la hora y los minutos del cuarto de hora actual
+    // Iniciamos la fecha en la hora 0 de hoy y le asignamos la hora y los minutos del cuarto de hora actual
     let fecha = (0, moment_1.default)().startOf("day").hour(Number(horas)).minute(cuartoActual);
+    if ((0, moment_1.default)().isSame(dateSelected, 'date')) {
+        let fecha = (0, moment_1.default)().startOf("day");
+    }
     const currentDay = fecha.date(); //Sacamos el dia actual de esa hora
-    const fechas = []; //Array para almacenar las fechas
+    const fechas = []; // Array para almacenar las fechas
     fecha = (0, moment_1.default)(fecha).add(serviceTime, "minutes"); //Aumentamos 15 minutos
-    while (fecha.date() === currentDay) { //mientras siga siendo el mismo dia
-        fechas.push(fecha.format("HH:mm")); //agregamos la fecha
-        fecha = (0, moment_1.default)(fecha).add(serviceTime, "minutes"); //Aumentamos 15 minutos
+    while (fecha.date() === currentDay) { // mientras siga siendo el mismo dia
+        fechas.push(fecha.format("HH:mm")); // agregamos la fecha
+        fecha = (0, moment_1.default)(fecha).add(serviceTime, "minutes"); // Aumentamos 15 minutos
     }
     const format = 'hh:mm';
     const dateAvailable = fechas.filter((hour) => {
@@ -107,7 +110,7 @@ const getBookingHoursCtrl = ({ body, user }, res) => __awaiter(void 0, void 0, v
         if (usedDate) {
             return false;
         }
-        let storeOpened = true;
+        let storeOpened = false;
         storeHours.hours.map((date) => {
             if (date) {
                 if ((0, moment_1.default)(hour, 'h:m').isBetween((0, moment_1.default)(date.start, format), (0, moment_1.default)(date.end, format), null, '[]')
