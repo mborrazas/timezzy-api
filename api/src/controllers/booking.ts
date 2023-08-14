@@ -46,8 +46,8 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
     const comercio = "647f165ddca1fe01a11c9a63";
 
     const dateSelected = moment(body.day, 'YYYY-MM-DD')
-    const today = moment(); 
-     const personalBookings = await getBookingByPersonalAndDate(body.personal, comercio, dateSelected.format('YYYY-MM-DD'));
+    const today = moment();
+    const personalBookings = await getBookingByPersonalAndDate(body.personal, comercio, dateSelected.format('YYYY-MM-DD'));
 
     const dateUsed = personalBookings.map((booking) => {
         return { openHour: booking.openHour, closeHour: booking.closeHour };
@@ -82,7 +82,7 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
 
     const tiempo = body.hours;
 
-    const serviceTime = Number(service[0].duration?? 0);
+    const serviceTime = Number(service[0]?.duration ?? 0);
 
     const [horas, minutos] = tiempo.split(":");
 
@@ -93,8 +93,8 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
     // Iniciamos la fecha en la hora 0 de hoy y le asignamos la hora y los minutos del cuarto de hora actual
 
     let fecha = moment().startOf("day");
-    
-    if(dateSelected.isSame(new Date(), 'date')){
+
+    if (dateSelected.isSame(new Date(), 'date')) {
         fecha = moment().startOf("day").hour(Number(horas)).minute(cuartoActual);
     }
 
