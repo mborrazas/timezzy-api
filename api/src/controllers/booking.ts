@@ -134,7 +134,7 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
             return false;
         }
 
-        let storeOpened = false; 
+        let storeOpened = true; 
         storeHours.hours.map((date) => {
             if (date) {
                 if (moment(hour, 'h:m').isBetween(moment(date.start, format), moment(date.end, format), null, '[]')
