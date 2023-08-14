@@ -115,6 +115,7 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
     const dateAvailable = fechas.filter((hour) => {
 
         let endTime = moment(hour, format).add(serviceTime, 'minutes').format('HH:mm');
+       /*
         if (storeHours) {
             if (!storeHours?.opened) {
                 return false;
@@ -145,7 +146,7 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
                 }
             });
         }
-/*
+
         if (!storeOpened) {
             return false;
         }
