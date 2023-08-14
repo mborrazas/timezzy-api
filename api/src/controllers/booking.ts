@@ -82,7 +82,7 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
 
     const tiempo = body.hours;
 
-    const serviceTime = Number(service[0].duration);
+    const serviceTime = Number(service[0].duration?? 0);
 
     const [horas, minutos] = tiempo.split(":");
 
@@ -97,7 +97,7 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
     if(dateSelected.isSame(new Date(), 'date')){
         fecha = moment().startOf("day").hour(Number(horas)).minute(cuartoActual);
     }
-    
+
     const currentDay = fecha.date(); //Sacamos el dia actual de esa hora
 
     const fechas = []; // Array para almacenar las fechas
