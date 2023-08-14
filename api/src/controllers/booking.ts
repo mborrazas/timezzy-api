@@ -73,8 +73,8 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
 
 
     const service = await getService(body.service, comercio);
-
-    if (!service) {
+    
+    if (!service || service.length == 0) {
         res.send({});
         return;
     }
@@ -82,7 +82,7 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
 
     const tiempo = body.hours;
 
-    const serviceTime = Number(service[0]?.duration ?? 0);
+    const serviceTime = Number(service[0].duration);
 
     const [horas, minutos] = tiempo.split(":");
 
