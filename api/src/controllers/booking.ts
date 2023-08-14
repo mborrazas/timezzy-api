@@ -43,7 +43,7 @@ const getBookingCtrl = async ({ body, user, params }: any, res: Response) => {
 };
 
 const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
-    const { comercio } = body;
+    const { comercio } = user;
 
     const dateSelected = moment(body.day, 'YYYY-MM-DD')
     const today = moment();
