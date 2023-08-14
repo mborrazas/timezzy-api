@@ -43,12 +43,11 @@ const getBookingCtrl = async ({ body, user, params }: any, res: Response) => {
 };
 
 const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
-    const { comercio } = user;
+    const comercio = "647f165ddca1fe01a11c9a63";
 
     const dateSelected = moment(body.day, 'YYYY-MM-DD')
-
-
-    const personalBookings = await getBookingByPersonalAndDate(body.personal, comercio, dateSelected.format('YYYY-MM-DD'));
+    const today = moment(); 
+     const personalBookings = await getBookingByPersonalAndDate(body.personal, comercio, dateSelected.format('YYYY-MM-DD'));
 
     const dateUsed = personalBookings.map((booking) => {
         return { openHour: booking.openHour, closeHour: booking.closeHour };
@@ -73,7 +72,7 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
     }
 
 
-    const service = await getService(body.service, comercio);
+    const service = await getService(body.service, "647f165ddca1fe01a11c9a63");
 
     if (!service) {
         res.send({});
@@ -93,9 +92,12 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
 
     // Iniciamos la fecha en la hora 0 de hoy y le asignamos la hora y los minutos del cuarto de hora actual
 
-    let fecha = moment().startOf("day").hour(Number(horas)).minute(cuartoActual);
-
-
+    let fecha = moment().startOf("day");
+    
+    if(dateSelected.isSame(new Date(), 'date')){
+        fecha = moment().startOf("day").hour(Number(horas)).minute(cuartoActual);
+    }
+    
     const currentDay = fecha.date(); //Sacamos el dia actual de esa hora
 
     const fechas = []; // Array para almacenar las fechas
@@ -115,13 +117,11 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
     const dateAvailable = fechas.filter((hour) => {
 
         let endTime = moment(hour, format).add(serviceTime, 'minutes').format('HH:mm');
-       /*
-        if (storeHours) {
-            if (!storeHours?.opened) {
-                return false;
-            }
+
+        if (!storeHours?.opened) {
+            return false;
         }
-     
+
         let usedDate = false;
         dateUsed.map((date) => {
             if (moment(hour, 'h:m').isBetween(moment(date.openHour, format), moment(date.closeHour, format), null, '[]') ||
@@ -129,7 +129,7 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
                 usedDate = true;
             }
         });
-  
+
 
         if (usedDate) {
             return false;
@@ -150,8 +150,8 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
         if (!storeOpened) {
             return false;
         }
-        */
-        
+
+
         return true;
     });
 
