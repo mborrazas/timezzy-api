@@ -53,7 +53,6 @@ const getBookingCtrl = ({ body, user, params }, res) => __awaiter(void 0, void 0
 });
 exports.getBookingCtrl = getBookingCtrl;
 const getBookingHoursCtrl = ({ body, user }, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
     const { comercio } = body;
     const dateSelected = (0, moment_1.default)(body.day, 'YYYY-MM-DD');
     const today = (0, moment_1.default)();
@@ -74,12 +73,12 @@ const getBookingHoursCtrl = ({ body, user }, res) => __awaiter(void 0, void 0, v
         return;
     }
     const service = yield (0, service_1.getService)(body.service, comercio);
-    if (!service) {
+    if (!service || service.length == 0) {
         res.send({});
         return;
     }
     const tiempo = body.hours;
-    const serviceTime = Number((_b = (_a = service[0]) === null || _a === void 0 ? void 0 : _a.duration) !== null && _b !== void 0 ? _b : 0);
+    const serviceTime = Number(service[0].duration);
     const [horas, minutos] = tiempo.split(":");
     // Calculamos cual es el "cuarto de hora" actual basado en los minutos
     // Es decir 00, 15, 30 o 45
