@@ -73,7 +73,7 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
     }
 
 
-    const service = await getService(body.service, "647f165ddca1fe01a11c9a63");
+    const service = await getService(body.service, comercio);
 
     if (!service) {
         res.send({});
