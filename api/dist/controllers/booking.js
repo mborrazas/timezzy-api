@@ -54,7 +54,7 @@ const getBookingCtrl = ({ body, user, params }, res) => __awaiter(void 0, void 0
 exports.getBookingCtrl = getBookingCtrl;
 const getBookingHoursCtrl = ({ body, user }, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
-    const comercio = "647f165ddca1fe01a11c9a63";
+    const { comercio } = body;
     const dateSelected = (0, moment_1.default)(body.day, 'YYYY-MM-DD');
     const today = (0, moment_1.default)();
     const personalBookings = yield (0, booking_1.getBookingByPersonalAndDate)(body.personal, comercio, dateSelected.format('YYYY-MM-DD'));
@@ -73,7 +73,7 @@ const getBookingHoursCtrl = ({ body, user }, res) => __awaiter(void 0, void 0, v
         res.send({});
         return;
     }
-    const service = yield (0, service_1.getService)(body.service, "647f165ddca1fe01a11c9a63");
+    const service = yield (0, service_1.getService)(body.service, comercio);
     if (!service) {
         res.send({});
         return;
