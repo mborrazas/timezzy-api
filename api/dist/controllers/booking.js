@@ -84,9 +84,6 @@ const getBookingHoursCtrl = ({ body, user }, res) => __awaiter(void 0, void 0, v
     let cuartoActual = Math.floor(Number(minutos) / serviceTime) * serviceTime;
     // Iniciamos la fecha en la hora 0 de hoy y le asignamos la hora y los minutos del cuarto de hora actual
     let fecha = (0, moment_1.default)().startOf("day").hour(Number(horas)).minute(cuartoActual);
-    if ((0, moment_1.default)().isSame(dateSelected, 'date')) {
-        let fecha = (0, moment_1.default)().startOf("day");
-    }
     const currentDay = fecha.date(); //Sacamos el dia actual de esa hora
     const fechas = []; // Array para almacenar las fechas
     fecha = (0, moment_1.default)(fecha).add(serviceTime, "minutes"); //Aumentamos 15 minutos
@@ -97,31 +94,42 @@ const getBookingHoursCtrl = ({ body, user }, res) => __awaiter(void 0, void 0, v
     const format = 'hh:mm';
     const dateAvailable = fechas.filter((hour) => {
         let endTime = (0, moment_1.default)(hour, format).add(serviceTime, 'minutes').format('HH:mm');
-        if (!(storeHours === null || storeHours === void 0 ? void 0 : storeHours.opened)) {
-            return false;
-        }
-        let usedDate = false;
-        dateUsed.map((date) => {
-            if ((0, moment_1.default)(hour, 'h:m').isBetween((0, moment_1.default)(date.openHour, format), (0, moment_1.default)(date.closeHour, format), null, '[]') ||
-                (0, moment_1.default)(endTime, 'h:m').isBetween((0, moment_1.default)(date.openHour, format), (0, moment_1.default)(date.closeHour, format), null, '[]')) {
-                usedDate = true;
-            }
-        });
-        if (usedDate) {
-            return false;
-        }
-        let storeOpened = false;
-        storeHours.hours.map((date) => {
-            if (date) {
-                if ((0, moment_1.default)(hour, 'h:m').isBetween((0, moment_1.default)(date.start, format), (0, moment_1.default)(date.end, format), null, '[]')
-                    && (0, moment_1.default)(endTime, 'h:m').isBetween((0, moment_1.default)(date.start, format), (0, moment_1.default)(date.end, format), null, '[]')) {
-                    storeOpened = true;
-                }
-            }
-        });
-        if (!storeOpened) {
-            return false;
-        }
+        /*
+         if (storeHours) {
+             if (!storeHours?.opened) {
+                 return false;
+             }
+         }
+      
+         let usedDate = false;
+         dateUsed.map((date) => {
+             if (moment(hour, 'h:m').isBetween(moment(date.openHour, format), moment(date.closeHour, format), null, '[]') ||
+                 moment(endTime, 'h:m').isBetween(moment(date.openHour, format), moment(date.closeHour, format), null, '[]')) {
+                 usedDate = true;
+             }
+         });
+   
+ 
+         if (usedDate) {
+             return false;
+         }
+ 
+         let storeOpened = false;
+         if (storeHours) {
+             storeHours.hours.map((date) => {
+                 if (date) {
+                     if (moment(hour, 'h:m').isBetween(moment(date.start, format), moment(date.end, format), null, '[]')
+                         && moment(endTime, 'h:m').isBetween(moment(date.start, format), moment(date.end, format), null, '[]')) {
+                         storeOpened = true;
+                     }
+                 }
+             });
+         }
+ 
+         if (!storeOpened) {
+             return false;
+         }
+         */
         return true;
     });
     let responseToSend = {};
