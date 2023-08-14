@@ -43,7 +43,7 @@ const getBookingCtrl = async ({ body, user, params }: any, res: Response) => {
 };
 
 const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
-    const comercio = "647f165ddca1fe01a11c9a63";
+    const { comercio } = body;
 
     const dateSelected = moment(body.day, 'YYYY-MM-DD')
     const today = moment();
@@ -72,7 +72,7 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
     }
 
 
-    const service = await getService(body.service, "647f165ddca1fe01a11c9a63");
+    const service = await getService(body.service, comercio);
 
     if (!service) {
         res.send({});
