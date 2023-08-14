@@ -94,9 +94,7 @@ const getBookingHoursCtrl = async ({ body, user }: any, res: Response) => {
     // Iniciamos la fecha en la hora 0 de hoy y le asignamos la hora y los minutos del cuarto de hora actual
     
     let fecha = moment().startOf("day").hour(Number(horas)).minute(cuartoActual);
-    if(moment().isSame(dateSelected, 'date')){
-        let fecha = moment().startOf("day");
-    }
+   
 
     const currentDay = fecha.date(); //Sacamos el dia actual de esa hora
 
